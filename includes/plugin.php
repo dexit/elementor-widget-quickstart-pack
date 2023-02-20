@@ -202,19 +202,32 @@ final class Plugin {
 		add_action( 'elementor/widgets/register', [ $this, 'register_widgets' ] );
 		add_action( 'elementor/elements/categories_registered', [$this, 'custom_categories' ]);
 
-		// add_action( 'elementor/frontend/after_enqueue_styles', [$this, 'my_plugin_frontend_stylesheets'] );
+		add_action( 'elementor/frontend/after_enqueue_styles', [$this, 'my_plugin_frontend_stylesheets'] );
+
+		add_action( 'elementor/frontend/after_register_scripts', [$this, 'my_plugin_frontend_scripts'] );
 		
 	}
 
 
 	// To load CSS on all pages
-	// public function my_plugin_frontend_stylesheets() {
+	public function my_plugin_frontend_stylesheets() {
 
-	// 	wp_register_style( 'common-css', plugins_url( '/assets/css/common.css', __FILE__ ) );
+		wp_register_style( 'bootstrap-css', plugins_url( '/assets/css/bootstrap.min.css', __FILE__ ) );
 
-	// 	wp_enqueue_style( 'common-css' );
+		wp_enqueue_style( 'bootstrap-css' );
 
-	// }
+	}
+
+	// JS
+	public function my_plugin_frontend_scripts() {
+
+		wp_register_script( 'bootstrap-js', plugins_url( '/assets/js/bootstrap.bundle.min.js', __FILE__ ), [ 'jquery' ], '', true );
+		wp_register_script( 'main-js', plugins_url( '/assets/js/main.js', __FILE__ ), [ 'jquery' ], '', true );
+
+		wp_enqueue_script( 'bootstrap-js' );
+		wp_enqueue_script( 'main-js' );
+
+	}
 	
 	
 	
@@ -244,8 +257,10 @@ final class Plugin {
 	public function register_widgets( $widgets_manager ) {
 
 		require_once( __DIR__ . '/widgets/guide-posts.php' );
+		require_once( __DIR__ . '/widgets/admission-requirements.php' );
 
 		$widgets_manager->register( new \Admission_Sight_Addon\Admission_Sight_Guide_Post() );
+		$widgets_manager->register( new \Admission_Sight_Addon\Admission_Requirements() );
 
 	}
 
